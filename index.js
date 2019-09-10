@@ -1,11 +1,18 @@
 const express = require("express");
 
+const db = require("./data/db-config");
 const server = express();
 
 server.use(express.json());
 
 server.get("/", (req, res) => {
-  res.send("Make get request");
+  db("cars")
+    .then(cars => {
+      res.status(200).json(cars);
+    })
+    .catch(() => {
+      res.status(500).json({ message: "Failed to retrieve cars" });
+    });
 });
 
 server.post("/", (req, res) => {});
